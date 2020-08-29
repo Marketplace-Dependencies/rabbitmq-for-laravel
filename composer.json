@@ -1,0 +1,26 @@
+{
+  "version": "1.0",
+  "name": "jurry/laravel-rabbitmq",
+  "type": "library",
+  "description": "RabbitMQ for Laravel & Lumen Frameworks",
+  "minimum-stability": "stable",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Wajdi Jurry",
+      "email": "jurrywajdi@yahoo.com"
+    }
+  ],
+  "require": {
+    "ext-sockets": "*",
+    "php-amqplib/php-amqplib": "^2.11",
+    "symfony/console": "^5.0",
+    "illuminate/console": "*",
+    "illuminate/validation": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Jurry\\RabbitMQ\\": "src/"
+    }
+  }
+}
