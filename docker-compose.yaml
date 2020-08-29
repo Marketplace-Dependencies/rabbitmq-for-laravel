@@ -1,0 +1,7 @@
+version: '3.3'
+
+services:
+  amqp-symfony-bundle:
+    image: registry.gitlab.com/shop-dependencies/rabbitmq-for-laravel
+    volumes:
+    - .:/src
