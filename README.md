@@ -23,17 +23,17 @@ composer require jurry/laravel-rabbitmq
     
             $this->app->singleton(\Jurry\RabbitMQ\Handler\AmqpHandler::class, function () {
                 return new \Jurry\RabbitMQ\Handler\AmqpHandler(
-                    env('JURRY_RABBITMQ_HOST'),
-                    env('JURRY_RABBITMQ_PORT'),
-                    env('JURRY_RABBITMQ_USERNAME'),
-                    env('JURRY_RABBITMQ_PASSWORD'),
-                    '\App\Services',
+                    env('JURRY_RABBITMQ_HOST'), // host
+                    env('JURRY_RABBITMQ_PORT'), // port
+                    env('JURRY_RABBITMQ_USERNAME'), // username
+                    env('JURRY_RABBITMQ_PASSWORD'), // password
+                    '\App\Services', // classesNamespace, where the consumer will look for to process the message with targeted service class
                     [
-                        'sync_queue' => [
+                        'sync_queue' => [ // Sync queue options, will be used when declare the queue
                             'name' => 'stores_sync',
                             'message_ttl' => 10000,
                         ],
-                        'async_queue' => [
+                        'async_queue' => [ // Async queue options, will be used when declare the queue
                             'name' => 'stores_async',
                             'message_ttl' => 10000,
                         ],
