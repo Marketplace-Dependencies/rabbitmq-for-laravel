@@ -67,7 +67,7 @@ composer require jurry/laravel-rabbitmq
     ```
 
 3. Start new workers:
-```bash
-php artisan amqp:sync_worker
-php artisan amqp:async_worker
-```
+    ```bash
+    php artisan amqp:sync_worker
+    php artisan amqp:async_worker
+    ```
