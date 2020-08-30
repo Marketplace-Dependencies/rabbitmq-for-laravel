@@ -55,7 +55,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        \Laravelista\LumenVendorPublish\VendorPublishCommand::class,
+        ...
         \Jurry\RabbitMQ\Commands\SyncConsumerCommand::class,
         \Jurry\RabbitMQ\Commands\AsyncConsumerCommand::class,
     ];
