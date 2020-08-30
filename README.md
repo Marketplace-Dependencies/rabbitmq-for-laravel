@@ -56,8 +56,8 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         ...
-        \Jurry\RabbitMQ\Commands\SyncConsumerCommand::class,
-        \Jurry\RabbitMQ\Commands\AsyncConsumerCommand::class,
+        \Jurry\RabbitMQ\Command\SyncConsumerCommand::class,
+        \Jurry\RabbitMQ\Command\AsyncConsumerCommand::class,
     ];
 
     ....
