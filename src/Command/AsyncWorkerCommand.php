@@ -1,26 +1,36 @@
 <?php
-/**
- * User: Wajdi Jurry
- * Date: 22 May 2020
- * Time: 12:30 ص
- */
 
-namespace Jurry\RabbitMQ\Command;
+namespace App\Console\Commands;
 
-
+use Illuminate\Console\Command;
 use Jurry\RabbitMQ\Handler\AmqpHandler;
 use Jurry\RabbitMQ\Handler\RequestHandler;
 use PhpAmqpLib\Message\AMQPMessage;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 
-class AsyncWorkerCommand extends Command
+class AsyncConsumerCommand extends Command
 {
-    /** @var AmqpHandler */
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'amqp:async_worker';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Async Consumer Command';
+
+    /**
+     * @var AmqpHandler
+     */
     private $amqpHandler;
 
-    /** @var RequestHandler */
+    /**
+     * @var RequestHandler
+     */
     private $requestHandler;
 
     /**
@@ -31,17 +41,19 @@ class AsyncWorkerCommand extends Command
     public function __construct(AmqpHandler $amqpHandler, RequestHandler $requestHandler)
     {
         $this->amqpHandler = $amqpHandler;
+
+        $requestHandler->setClassesNamespace($amqpHandler->classesNamespace);
         $this->requestHandler = $requestHandler;
 
-        parent::__construct('async_worker');
+        parent::__construct();
     }
 
-    protected function configure()
-    {
-        $this->setDescription('Async Queue Worker Command');
-    }
-
-    public function execute(InputInterface $input, OutputInterface $output)
+    /**
+     * Execute the console command.
+     *
+     * @return mixed
+     */
+    public function handle()
     {
         $this->amqpHandler->declareAsync();
 
