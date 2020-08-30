@@ -8,18 +8,23 @@
 namespace Jurry\RabbitMQ\Handler;
 
 
-use Psr\Container\ContainerInterface;
-
 class RequestHandler
 {
     /**
-     * @var ContainerInterface
+     * @var string
      */
-    private $container;
+    private $classesNamespace;
 
-    public function __construct(ContainerInterface $container)
+    /**
+     * @param string|null $classesNamespace
+     */
+    public function setClassesNamespace(?string $classesNamespace = null)
     {
-        $this->container = $container;
+        if (!empty($classesNamespace) && strpos($classesNamespace, '\\') !== 0) {
+            $classesNamespace = '\\' . $classesNamespace;
+        }
+
+        $this->classesNamespace = rtrim($classesNamespace, '\\');
     }
 
     /**
@@ -28,7 +33,7 @@ class RequestHandler
      */
     private function formatServiceName(string $service): string
     {
-        return sprintf('app.%s_service', $service);
+        return ucfirst($service);
     }
 
     /**
@@ -41,12 +46,16 @@ class RequestHandler
      */
     public function process(string $service, string $method, $params)
     {
-        $service = $this->container->get($this->formatServiceName($service));
+        $className = $this->classesNamespace . '\\' . $this->formatServiceName($service);
 
-        if (!is_callable([$service, $method])) {
-            throw new \Exception('Method "' . get_class($service) . '::' . $method . '" is not a callable method');
+        if (!($service = class_exists($className))) {
+            throw new \Exception("Class \"{$className}\" does not exists", 404);
         }
 
-        return call_user_func_array([$service, $method], $params);
+        if (!is_callable([$className, $method])) {
+            throw new \Exception('Method "' . get_class($service) . '::' . $method . '" is not a callable method', 400);
+        }
+
+        return call_user_func_array([$className, $method], $params);
     }
 }

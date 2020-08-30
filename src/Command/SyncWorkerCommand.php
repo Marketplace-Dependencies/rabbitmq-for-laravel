@@ -1,48 +1,61 @@
 <?php
-/**
- * User: Wajdi Jurry
- * Date: ٢٣‏/٥‏/٢٠٢٠
- * Time: ٢:١٨ م
- */
 
-namespace Jurry\RabbitMQ\Command;
+namespace App\Console\Commands;
 
 
+use Illuminate\Console\Command;
 use Jurry\RabbitMQ\Handler\AmqpHandler;
 use Jurry\RabbitMQ\Handler\RequestHandler;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Message\AMQPMessage;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 
-class SyncWorkerCommand extends Command
+class SyncConsumerCommand extends Command
 {
-    /** @var AmqpHandler */
+    /**
+     * @var AmqpHandler
+     */
     private $amqpHandler;
 
-    /** @var RequestHandler */
+    /**
+     * @var RequestHandler
+     */
     private $requestHandler;
 
     /**
-     * AsyncWorkerCommand constructor.
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'amqp:sync_worker';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Sync Consumer Command';
+
+    /**
+     * SyncWorkerCommand constructor.
      * @param AmqpHandler $amqpHandler
      * @param RequestHandler $requestHandler
      */
     public function __construct(AmqpHandler $amqpHandler, RequestHandler $requestHandler)
     {
         $this->amqpHandler = $amqpHandler;
+
+        $requestHandler->setClassesNamespace($amqpHandler->classesNamespace);
         $this->requestHandler = $requestHandler;
 
-        parent::__construct('sync_worker');
+        parent::__construct();
     }
 
-    protected function configure()
-    {
-        $this->setDescription('Async Queue Worker Command');
-    }
-
-    public function execute(InputInterface $input, OutputInterface $output)
+    /**
+     * Execute the console command.
+     *
+     * @return mixed
+     */
+    public function handle()
     {
         $this->amqpHandler->declareSync();
 
@@ -95,5 +108,4 @@ class SyncWorkerCommand extends Command
 
         return 0;
     }
-
 }
