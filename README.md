@@ -60,7 +60,7 @@ class Kernel extends ConsoleKernel
         \Jurry\RabbitMQ\Command\AsyncConsumerCommand::class,
     ];
 
-    ....
+    //....
 
 }
 ```
