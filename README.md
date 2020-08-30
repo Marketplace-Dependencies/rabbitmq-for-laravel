@@ -45,7 +45,27 @@ composer require jurry/laravel-rabbitmq
     ```
     - You can change the parameters as wish you need
 
-2. Start new workers:
+2. Register your custom command by adding your created class to the $commands member inside the app/Console/Kernel.php file:
+```php
+class Kernel extends ConsoleKernel
+{
+    /**
+     * The Artisan commands provided by your application.
+     *
+     * @var array
+     */
+    protected $commands = [
+        \Laravelista\LumenVendorPublish\VendorPublishCommand::class,
+        \Jurry\RabbitMQ\Commands\SyncConsumerCommand::class,
+        \Jurry\RabbitMQ\Commands\AsyncConsumerCommand::class,
+    ];
+
+    ....
+
+}
+```
+
+3. Start new workers:
     ```bash
     php artisan amqp:sync_worker
     php artisan amqp:async_worker
