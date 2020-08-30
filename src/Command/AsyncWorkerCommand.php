@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace Jurry\RabbitMQ\Commands;
 
 use Illuminate\Console\Command;
 use Jurry\RabbitMQ\Handler\AmqpHandler;
