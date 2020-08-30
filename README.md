@@ -55,14 +55,15 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        ...
+        // ...
         \Jurry\RabbitMQ\Command\SyncConsumerCommand::class,
         \Jurry\RabbitMQ\Command\AsyncConsumerCommand::class,
     ];
 
-    //....
+    // ...
 
 }
+
 ```
 
 3. Start new workers:
