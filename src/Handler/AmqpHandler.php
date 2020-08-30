@@ -65,7 +65,15 @@ class AmqpHandler
 
     public function declareSync()
     {
-        $options = $this->queuesProperties['sync_queue'];
+        $defaultOptions = [
+            'passive' => false,
+            'durable' => false,
+            'exclusive' => false,
+            'auto_delete' => false,
+            'no_wait' => false,
+        ];
+
+        $options = array_merge($defaultOptions, $this->queuesProperties['sync_queue']);
 
         $this->channel->queue_declare($options['name'],
             $options['passive'], $options['durable'], $options['exclusive'], $options['auto_delete'], $options['no_wait'],
@@ -75,7 +83,15 @@ class AmqpHandler
 
     public function declareAsync()
     {
-        $options = $this->queuesProperties['async_queue'];
+        $defaultOptions = [
+            'passive' => false,
+            'durable' => false,
+            'exclusive' => false,
+            'auto_delete' => false,
+            'no_wait' => false,
+        ];
+
+        $options = array_merge($defaultOptions, $this->queuesProperties['async_queue']);
 
         $this->channel->queue_declare($options['name'],
             $options['passive'], $options['durable'], $options['exclusive'], $options['auto_delete'], $options['no_wait'],
