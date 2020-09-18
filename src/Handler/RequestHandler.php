@@ -56,6 +56,8 @@ class RequestHandler
             throw new \Exception('Method "' . get_class($service) . '::' . $method . '" is not a callable method', 400);
         }
 
-        return call_user_func_array([app($className), $method], $params);
+        $class = app($className);
+
+        return call_user_func_array([$class, $method], $params);
     }
 }
