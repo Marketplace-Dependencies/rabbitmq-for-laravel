@@ -43,8 +43,6 @@ class SyncConsumerCommand extends Command
     public function __construct(AmqpHandler $amqpHandler, RequestHandler $requestHandler)
     {
         $this->amqpHandler = $amqpHandler;
-
-        $requestHandler->setClassesNamespace($amqpHandler->classesNamespace);
         $this->requestHandler = $requestHandler;
 
         parent::__construct();
@@ -73,17 +71,14 @@ class SyncConsumerCommand extends Command
                     try {
 
                         // handle request
-                        $response = $this->requestHandler->process(
-                            $payload['service'],
+                        $message = $this->requestHandler->process(
+                            $payload['route'],
                             $payload['method'],
-                            $payload['params']
+                            $payload['query'],
+                            $payload['body']
                         );
 
-                        // send response
-                        $message = json_encode($response);
-
                     } catch (\Throwable $exception) {
-                        // TODO: handle exception
                         $message = json_encode([
                             'hasError' => true,
                             'message' => $exception->getMessage(),

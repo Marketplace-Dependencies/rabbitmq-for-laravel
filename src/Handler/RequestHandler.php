@@ -8,54 +8,52 @@
 namespace Jurry\RabbitMQ\Handler;
 
 
+use GuzzleHttp\Client;
+
 class RequestHandler
 {
     /**
-     * @var string
+     * @var $this
      */
-    private $classesNamespace;
+    private static $instance;
 
-    /**
-     * @param string|null $classesNamespace
-     */
-    public function setClassesNamespace(?string $classesNamespace = null)
+    private $httpClient;
+
+    public function __construct()
     {
-        if (!empty($classesNamespace) && strpos($classesNamespace, '\\') !== 0) {
-            $classesNamespace = '\\' . $classesNamespace;
-        }
-
-        $this->classesNamespace = rtrim($classesNamespace, '\\');
+        $this->httpClient = new Client([
+            'base_uri' => env('JURRY_BASE_API_URI'),
+            'timeout' => env('JURRY_HTTP_CLIENT_TIMEOUT')
+        ]);
     }
 
     /**
-     * @param string $service
-     * @return string
+     * @return $this
      */
-    private function formatServiceName(string $service): string
+    public function getInstance(): self
     {
-        return ucfirst($service);
+        return self::$instance ?? self::$instance = new self;
     }
 
     /**
-     * @param string $service
+     * @param string $route
      * @param string $method
-     * @param $params
-     * @return mixed
-     *
-     * @throws \Exception
+     * @param array $body
+     * @param array $query
+     * @return string|null
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function process(string $service, string $method, $params)
+    public function process(string $route = '', string $method = '', array $query = [], array $body = [])
     {
-        $className = $this->classesNamespace . '\\' . $this->formatServiceName($service);
+        if (!empty($route)) {
+            $request = $this->httpClient->request($route, $method, [
+                'json' => $body,
+                'query' => $query
+            ]);
 
-        if (!($service = class_exists($className))) {
-            throw new \Exception("Class \"{$className}\" does not exists", 404);
+            return $request->getBody()->getContents();
         }
 
-        if (!is_callable([$className, $method])) {
-            throw new \Exception('Method "' . get_class($service) . '::' . $method . '" is not a callable method', 400);
-        }
-
-        return call_user_func_array([app($className), $method], $params);
+        return null;
     }
 }
