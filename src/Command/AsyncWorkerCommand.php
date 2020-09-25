@@ -42,7 +42,7 @@ class AsyncConsumerCommand extends Command
     {
         $this->amqpHandler = $amqpHandler;
 
-        $requestHandler->setClassesNamespace($amqpHandler->classesNamespace);
+        $requestHandler->setClassesNamespace($amqpHandler->baseApiUri);
         $this->requestHandler = $requestHandler;
 
         parent::__construct();
@@ -67,9 +67,10 @@ class AsyncConsumerCommand extends Command
                     try {
                         $payload = json_decode($message->getBody(), true);
                         $this->requestHandler->process(
-                            $payload['service'],
+                            $payload['route'],
                             $payload['method'],
-                            $payload['params']
+                            $payload['query'],
+                            $payload['body']
                         );
                     } catch (\Throwable $exception) {
                         // TODO: handle exception message
