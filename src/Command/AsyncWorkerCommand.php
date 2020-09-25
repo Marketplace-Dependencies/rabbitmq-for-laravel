@@ -41,8 +41,6 @@ class AsyncConsumerCommand extends Command
     public function __construct(AmqpHandler $amqpHandler, RequestHandler $requestHandler)
     {
         $this->amqpHandler = $amqpHandler;
-
-        $requestHandler->setClassesNamespace($amqpHandler->baseApiUri);
         $this->requestHandler = $requestHandler;
 
         parent::__construct();
