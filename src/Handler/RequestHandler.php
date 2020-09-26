@@ -46,7 +46,7 @@ class RequestHandler
     public function process(string $route = '', string $method = '', array $query = [], array $body = [])
     {
         if (!empty($route)) {
-            $request = $this->httpClient->request($route, $method, [
+            $request = $this->httpClient->request($method, $route, [
                 'json' => $body,
                 'query' => $query
             ]);
