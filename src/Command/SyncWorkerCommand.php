@@ -82,7 +82,7 @@ class SyncConsumerCommand extends Command
                         $message = json_encode([
                             'hasError' => true,
                             'message' => $exception->getMessage(),
-                            'code' => $exception->getCode() ?: 500
+                            'status' => $exception->getCode() ?: 500
                         ]);
                     }
                     $amqpRequest->basic_ack($request->delivery_info['delivery_tag']);
