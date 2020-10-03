@@ -67,6 +67,7 @@ class AsyncConsumerCommand extends Command
                         $this->requestHandler->process(
                             $payload['route'],
                             $payload['method'],
+                            $payload['headers'],
                             $payload['query'],
                             $payload['body']
                         );
