@@ -27,7 +27,6 @@ composer require jurry/laravel-rabbitmq
                     env('JURRY_RABBITMQ_PORT'), // port
                     env('JURRY_RABBITMQ_USERNAME'), // username
                     env('JURRY_RABBITMQ_PASSWORD'), // password
-                    '\App\Services', // classesNamespace, where the consumer will look for to process the message with targeted service class
                     [
                         'sync_queue' => [ // Sync queue options, will be used when declare the queue
                             'name' => 'stores_sync',
